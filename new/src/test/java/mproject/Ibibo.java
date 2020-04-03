@@ -1,5 +1,8 @@
 package mproject;
 
+import java.io.File;
+import java.io.FileWriter;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -10,8 +13,9 @@ public class Ibibo {
 	public static String bus="(//span[contains(@class,'iconText ')])[3]";
 	public static String date1="(//div[contains(@class,'CheckInDateWrapDi')][1])";
 public static String nextmonth ="//div[contains(@class,'MonthChangeRightArrowDiv')]";
-		public static String date="(//span[contains(text(),'10')])[2]";
-		public static String ndate="(//span[contains(text(),'29')])[2]";
+		public static String date="(//span[contains(text(),'10')])[1]";
+
+		public static String ndate="(//span[contains(text(),'29')])[1]";
 
 
 public static String nights ="//div[contains(@class,'NightCountWrap-fity7j')]";
@@ -37,7 +41,7 @@ public static String nights ="//div[contains(@class,'NightCountWrap-fity7j')]";
 
 	
 	public static void main(String[] args) throws Exception
-	{
+	{ 
 		System.setProperty("webdriver.chrome.driver","H:\\ch\\chromedriver.exe");
 		WebDriver driver = new ChromeDriver();	
 		driver.get(" https://www.goibibo.com");
@@ -45,8 +49,14 @@ public static String nights ="//div[contains(@class,'NightCountWrap-fity7j')]";
 		Thread.sleep(5000);
 		driver.findElement(By.xpath(date1)).click();
 		driver.findElement(By.xpath(nextmonth)).click();
+		driver.findElement(By.xpath(nextmonth)).click();
+		//driver.findElement(By.xpath(nextmonth)).click();
+
 		driver.findElement(By.xpath(date)).click();
+		Thread.sleep(2000);
+
 		driver.findElement(By.xpath(ndate)).click();
+		Thread.sleep(5000);
 
 		String night= driver.findElement(By.xpath(nights)).getText();
 		System.out.println(night);
@@ -60,13 +70,34 @@ public static String nights ="//div[contains(@class,'NightCountWrap-fity7j')]";
 		driver.findElement(By.xpath(any)).click();
 		driver.findElement(By.xpath(submit)).click();
 
-		String a= driver.findElement(By.xpath(hotelname)).getText();
-		String b= driver.findElement(By.xpath(hotelprice)).getText();
-		String c= driver.findElement(By.xpath(ratings)).getText();
-		System.out.println(a);
-		System.out.println(b);
-		System.out.println(c);
-		Thread.sleep(3000);
+		File newTextFile = new File("H:/ibibo.txt");
+
+        FileWriter fw = new FileWriter(newTextFile);
+        
+		for (int i = 0; i < 3; i++)
+	    {
+	    	WebElement p=driver.findElement(By.xpath(hotelname.replace("replace"," ' +i '")));
+	    	WebElement q=driver.findElement(By.xpath(hotelprice.replace("replace"," ' +i '")));
+	    	WebElement r=driver.findElement(By.xpath(ratings.replace("replace"," '+i '")));
+	    	
+	    	String mname=p.getText();
+	    	System.out.println(mname);
+	    	String mprice=q.getText();
+	    	System.out.println(mprice);
+
+	    	String mratings=r.getText();
+	    	System.out.println(mratings);
+	    
+	    	fw.write(mname);
+	    	fw.write(mprice);
+	    	fw.write(mratings);
+
+	    	
+
+	    }
+        fw.close();
+
+		
 
 		driver.findElement(By.xpath(selectroom)).click();
 
